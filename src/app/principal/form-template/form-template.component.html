@@ -1,0 +1,119 @@
+<h1>Formulario basado en template</h1>
+<section class="container-sm">
+<form #formulario="ngForm">
+<section class="form-group m-3">
+<label for="user">Username</label>
+<input type="text" class="form-control" name="user"
+[(ngModel)]="model.username"
+required
+#username="ngModel">
+<!-- Validaciones -->
+<section *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+<section *ngIf="username.errors?.['required']">
+El usuario es requerido
+</section>
+</section>
+
+</section>
+<section class="form-group m-3">
+<label for="pass">Password</label>
+<input type="password" class="form-control" name="pass"
+[(ngModel)]="model.password"
+required
+minlength="4"
+#password="ngModel"
+>
+<!-- Validaciones -->
+<section *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+<section *ngIf="password.errors?.['required']">
+El password es requerido
+</section>
+<section *ngIf="password.errors?.['minlength']">
+El password debe tener al menos 4 caracteres
+</section>
+</section>
+</section>
+
+<!-- Control select con componente enum-->
+<section class="form-group m-3">
+<label for="paises">Selecciona un país</label>
+<select class="form-control" name="paises" [(ngModel)]="model.pais">
+<option *ngFor="let item of paises" value={{item.value}}>{{item.text}}</option>
+</select>
+</section>
+
+<!-- Control checkbox -->
+<section class="form-group">
+    <input type="checkbox" class="form-check-input" name="ofertas" [(ngModel)]="model.ofertas">
+    <label class="form-check-label">¿Desea recibir ofertas?</label>
+</section>
+
+<section class="m-3">
+<button type="submit" class="btn btn-primary" (click)="Enviar()"
+[disabled]="!formulario.form.valid">Enviar</button>
+<button type="cancel" class="btn btn-warning" (click)="Cancelar()">Cancelar</button>
+</section>
+</form>
+</section>  
+
+
+<!-- Reto -->
+<h2>RETO Y ACTIVIDAD ASINCRONA</h2>
+<h2>FORMULARIO REACTIVO</h2>
+<form>
+    <label for="">Name:</label> <br>
+    <input type="text" name="nombre" [(ngModel)]="nombre">
+    <p>Value: {{nombre}}</p>
+</form>
+
+<p>Validaciones</p>
+
+<form [formGroup]="registroform" (submit)="confirmacion()">
+
+    <section class="form-group m-3">
+        <label class="h4" for="nombres">Nombre</label>
+        <input class="form-control" type="text" minlength="10" formControlName="nombres" [ngStyle]="{'border-color': nombres?.invalid && (nombres?.dirty || nombres?.touched)?'red':'gray'}">
+        <section *ngIf="nombres?.invalid && (nombres?.dirty || nombres?.touched)">
+            <section *ngIf="nombres?.errors?.['required']" class="alert alert-success">
+                el nombre es obligatorio
+            </section>
+
+            <section *ngIf="nombres?.errors?.['pattern']" class="alert alert-success">
+                Como minino 10 caracteres
+            </section>
+        </section>
+    </section>  
+
+
+    <section class="form-group m-3">
+        <label class="h4" for="email">Email</label>
+        <input class="form-control" type="email" formControlName="email"  [ngStyle]="{'border-color': email?.invalid && (email?.dirty || email?.touched)?'red':'gray'}">
+        <section *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+            <section *ngIf="email?.errors?.['required']" class="alert alert-success">
+                el correo es obligatorio
+            </section>
+            
+            <section *ngIf="email?.errors?.['pattern']" class="alert alert-success">
+                Correo Invalido
+            </section>
+        </section>
+    </section>
+
+    <section>
+        <p class="m-2">Mensaje</p>
+        <textarea name="" class="m-2" maxlength="500" formControlName="mensaje"></textarea>
+        <section *ngIf="mensaje?.invalid && (mensaje?.dirty || mensaje?.touched)">
+
+            <section *ngIf="mensaje?.errors?.['required']" class="alert alert-success">
+                El mensaje es obligatorio
+            </section>
+        </section>
+    </section>
+
+    <section class="form-group m-3">
+        <button [disabled]="registroform.invalid" type="submit" class="btn btn-primary m-1">Confirmar</button>
+    </section>
+    <section *ngIf="registroform.valid">
+            <h3 class="text-primary">{{info}}</h3>
+    </section>
+</form>
